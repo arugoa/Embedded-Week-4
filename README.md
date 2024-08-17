@@ -138,6 +138,14 @@ There are a number of remote functions and variables that we use to interface wi
 The four axes are `lX`, `lY`,`rX`, `rY`, and they have bounds of -660 to 660.
 The two switches are `lS` and `rS`, and they have one of three states, `Remote::SwitchState::UP`, `Remote::SwitchState::MID`, or `Remote::SwitchState::DOWN`.
 
+## Chassis Motors and Wheels
+
+The motors that turn the wheels on the robot and allow them to move around are called the chassis motors. 
+
+Note that the wheels that we work with on the robot are not regular wheels. Instead, they are omnidirectional wheels that allow for movement in any direction. However, these come with their own drawbacks such as slippage and possibly requiring positioning the wheels in a certain way to get over obstacles.
+
+With omnidirectional wheels, we can do 3 things to the robot. We can make it move forward/backward, strafe left/right, and rotate clockwise/counterclockwise. By sending commands to each chassis motor at the same time it allows for these movements.
+
 # Exercise #1
 
 For this exercise, we're writing main robot code. The task is to make the main robot code do as such: 
