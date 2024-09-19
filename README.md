@@ -5,9 +5,9 @@ There are about three types of DJI Motors we use:
 They are programmed slightly differently, which is why it’s necessary for the code to
 know which motor on which port is which type.
 
-| GM6020                 | M3508                                     | M2006                                     |
-| ---------------------- | ----------------------------------------- | ----------------------------------------- |
-| ![](assets/gm6020.png) | <img src="assets/m3508.png"  width="200"> | <img src="assets/m2006.png"  width="100"> |
+| GM6020               | M3508                                         | M2006                                         |
+| -------------------- | --------------------------------------------- | --------------------------------------------- |
+| ![](assets/gm6020.png) | `<img src="assets/m3508.png"  width="200">` | `<img src="assets/m2006.png"  width="100">` |
 
 ## Constructor
 
@@ -25,23 +25,23 @@ The motor type is also an input in the constructor, as the DJIMotor treats motor
 
 One thing to note with motor IDs is that there is an unusual style of overlap between the M3508, M2006, and GM6020 IDs. M2006s and M3508s act the same, but GM6020's act as M3508s shifted forwards by 4.
 
-| True ID | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  |
-| ------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| M3508   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | DNE | DNE | DNE | DNE |
-| M2006   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | DNE | DNE | DNE | DNE |
-| GM6020  | DNE | DNE | DNE | DNE | 1   | 2   | 3   | 4   | 5   | 6   | 7   | DNE |
+| True ID | 1   | 2   | 3   | 4   | 5 | 6 | 7 | 8 | 9   | 10  | 11  | 12  |
+| ------- | --- | --- | --- | --- | - | - | - | - | --- | --- | --- | --- |
+| M3508   | 1   | 2   | 3   | 4   | 5 | 6 | 7 | 8 | DNE | DNE | DNE | DNE |
+| M2006   | 1   | 2   | 3   | 4   | 5 | 6 | 7 | 8 | DNE | DNE | DNE | DNE |
+| GM6020  | DNE | DNE | DNE | DNE | 1 | 2 | 3 | 4 | 5   | 6   | 7   | DNE |
 
 For example, you could have an M3508 on ID 2, an M2006 on ID 7, but then the M2006 on ID 7 would prevent you from having a GM6020 on ID 3. In the underlying structure, we would assign them data the same and they give us feedback the same. This is something you need to consider when you wire robots and set their IDs. One final thing to keep in mind is that the GM6020's range from 1-7, so the total theoretical max motors per bus is 11, not 12
 
 #### Setting IDs for Motors
 
 When you set the ID for a M3508 or M2006, you push the button on the ESC once, then tap it the number of the id you want to set it as, and then after a second it will set the ID.
-<insert video>
+`<insert video>`
 For example, if we were to set one to ID 3, we would go
 TAP--TAP-TAP-TAP-------
 and that would set it to ID 3.
 
-For the GM6020s, there are 4 binary switches, three of which you flip in a way to set it as a binary number. The three switches will give you a range from 0-7, where valid combinations are 1-7.
+For the GM6020s, there are 4 binary switches, three of which you flip in a way to set it as a binary number, and the fourth one is for a CAN resistor. The three switches will give you a range from 0-7, where valid combinations are 1-7.
 
 ## Feedback
 
@@ -131,35 +131,58 @@ In this separate document, we go more into depth on the CANHandler and our proto
 
 There are a number of remote functions and variables that we use to interface with the remote. For this sim, we have imitation functions that will mimic a behavior of a remote flipping on and off.
 
-`remoteRead()` is something that needs to be called at the start of every loop. It actually grabs the UART data from the remote and sets the remote values. The remote we use has 4 axis values and 2 tri-state switches. These correspond with 6 built in variables for you to use. 
+`remoteRead()` is something that needs to be called at the start of every loop. It actually grabs the UART data from the remote and sets the remote values. The remote we use has 4 axis values and 2 tri-state switches. These correspond with 6 built in variables for you to use.
 
 ![](assets/dt7.png)
 
-The four axes are `lX`, `lY`,`rX`, `rY`, and they have bounds of -660 to 660.
-The two switches are `lS` and `rS`, and they have one of three states, `Remote::SwitchState::UP`, `Remote::SwitchState::MID`, or `Remote::SwitchState::DOWN`.
+The four axes are `leftX`, `leftY`,`rrightX`, `rightY`, and they have bounds of -660 to 660.
+The two switches are `leftSwitch` and `rightSwitch`, and they have one of three states, `Remote::SwitchState::UP`, `Remote::SwitchState::MID`, or `Remote::SwitchState::DOWN`. You can access them by doing something like `remote.rightSwitch()` or `remote.leftY()`.
 
 ## Chassis Motors and Wheels
 
-The motors that turn the wheels on the robot and allow them to move around are called the chassis motors. 
+The motors that turn the wheels on the robot and allow them to move around are called the chassis motors.
 
 Note that the wheels that we work with on the robot are not regular wheels. Instead, they are omnidirectional wheels that allow for movement in any direction. However, these come with their own drawbacks such as slippage and possibly requiring positioning the wheels in a certain way to get over obstacles.
 
 With omnidirectional wheels, we can do 3 things to the robot. We can make it move forward/backward, strafe left/right, and rotate clockwise/counterclockwise. By sending commands to each chassis motor at the same time it allows for these movements.
 
-# Exercise #1
+# Assignment #1
 
-For this exercise, we're writing main robot code. The task is to make the main robot code do as such: 
+For this assignment, we're writing main robot code. The task is to make the main robot code do as such:
 
-We have three robot modes we want you to code, depending on the left switch `lS`. If it is up, we are in power mode, if it is mid we are in speed mode and if is down we are in position mode.
+We have three robot modes we want you to code, depending on the left switch. If it is up, we are in power mode, if it is mid we are in speed mode and if is down we are in position mode.
 
-For all three modes, set the respective element to 10x the left stick x  `lS` value.
+For all three modes, set the respective element to 10x the left stick x `lS` value.
+For power mode, set the motor's power to 20 times the left stick X value.
+For speed mode, set the motor's speed to 5 times the left stick X value.
+for position mode, set the motor's position to 10 times the left stick X value.
 
 You can use getData to see what the value is, given a specific `motorDataType`.
 
-There is again [starter code](motorMove.cpp). This time, you have full freedom to change anything in the main class section, but nothing above, as thats all part of the base classes. We do recommend adding prints anywhere, to help you debug your code, but make sure your code works with the original classes.
+There is again [starter code](week4_assignment1.cpp). This time, you have full freedom to change anything in the main class section, but nothing above, as thats all part of the base classes. We do recommend adding prints anywhere, to help you debug your code, but make sure your code works with the original classes.
 
 You don't need to worry about adding any referee or inner-outer loop stuff, like in the example code, but all motor/remote related components you will need.
+
+Let's say that the motor you're controlling is ID 1, CANBUS 1, and is of type M3508. You can name it whatever you'd like.
+
+# Assignment #2
+
+For this assignment, you're going to be working with multiple motors and implementing omni-drive. This is a simple 4-motor control system that uses omni wheels to allow not only forward and rotational movement, but also sideways movement. If you are not aware of what omni-drive is, you should see [this video](https://www.youtube.com/watch?v=7gIUFnRCFY4). There is an algorithm that you can use to generate the wheel speeds based on three factors, forward-backward movement, which we'll call `y`, sideways movement, which we'll call `x`, and rotational movement, which we'll call `r`. In this case, we want the left X and left Y to correspond to `x` and `y`, and `r` will be the right X. 
+
+All motors will be on CANBUS 1, of type M3508, and they will be ID'd as such. Front Left is ID 1, Front Right is ID 2, Back Left is ID 3, and Back Right is ID 4.
+
+Consider the wheels in an orientation like so, and assume that a wheel will move clockwise when given a positive speed.
+[](assets/omni.png)
+(This is not what our robots look like, this was a frame when we were switching chassis types two years ago, it's the only good photo I have of all four wheels and the frame.)
+
+See if you can figure out the formula to do so on your own. 
+
+If you're having trouble, [this article](http://blog.elliotjb.com/2013/10/holonomic-x-drive-tutorial-theory-of.html) talks about the theoretical math.
+
+If you're having trouble with that, [this video](https://www.youtube.com/watch?v=gnSW2QpkGXQ) goes over two potential answers. (A mecanum wheel can be treated the same as an omniwheel at a 45 degree angle).
 
 # Final Thoughts
 
 As you finish the training program, we've compiled a small overview of the classes we use and how they fit together, and you can find that [here](classesOverview.md). It is intended to make the transition to working on the robot easier.
+
+It is also highly recommended that you look at the [baseline code example](baseCodeExample.md), it has an example of empty code that has nothing but the baseline requirements for the code to run in general, like #includes, loops, required motor functions, and etc.

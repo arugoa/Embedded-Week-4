@@ -1,5 +1,11 @@
+//STARTER 
+//THIS EXERCISE IS TO BE DONE IN A GENERIC C++ COMPILER
+//https://www.programiz.com/cpp-programming/online-compiler/
+//IF YOU HAVE ISSUES WITH THE COMPILER, CONTACT EMBEDDED LEAD
+
 // super simplified version of how DJIMotor works and how we access the remote data
 #include <string>
+#include <cstdint>
 constexpr int CAN_HANDLER_NUMBER = 2;
 
 enum motorType {
@@ -162,5 +168,5 @@ void remoteRead(bool debug = false){
 // Use prints and getData() for debugging purposes
 
 int main(){
-  
+    
 }
