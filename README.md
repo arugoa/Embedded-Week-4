@@ -167,7 +167,7 @@ Let's say that the motor you're controlling is ID 1, CANBUS 1, and is of type M3
 
 # Assignment #2
 
-For this assignment, you're going to be working with multiple motors and implementing omni-drive. This is a simple 4-motor control system that uses omni wheels to allow not only forward and rotational movement, but also sideways movement. If you are not aware of what omni-drive is, you should see [this video](https://www.youtube.com/watch?v=7gIUFnRCFY4). There is an algorithm that you can use to generate the wheel speeds based on three factors, forward-backward movement, which we'll call `y`, sideways movement, which we'll call `x`, and rotational movement, which we'll call `r`. In this case, we want the left X and left Y to correspond to `x` and `y`, and `r` will be the right X. 
+For this assignment, you're going to be working with multiple motors and implementing omni-drive. This is a simple 4-motor control system that uses omni wheels to allow not only forward and rotational movement, but also sideways movement. If you are not aware of what omni-drive is, you should see [this video](https://www.youtube.com/watch?v=7gIUFnRCFY4). There is an algorithm that you can use to generate the wheel speeds based on three factors, forward-backward movement, which we'll call `y`, sideways movement, which we'll call `x`, and rotational movement, which we'll call `r`. In this case, we want the left X and left Y to correspond to `x` and `y`, and `r` will be the right X.
 
 All motors will be on CANBUS 1, of type M3508, and they will be ID'd as such. Front Left is ID 1, Front Right is ID 2, Back Left is ID 3, and Back Right is ID 4.
 
@@ -175,14 +175,14 @@ Consider the wheels in an orientation like so, and assume that a wheel will move
 ![](assets/omni.png)
 (This is not what our robots look like, this was a frame when we were switching chassis types two years ago, it's the only good photo I have of all four wheels and the frame.)
 
-See if you can figure out the formula to do so on your own. 
+See if you can figure out the formula to do so on your own.
 
 If you're having trouble, [this article](http://blog.elliotjb.com/2013/10/holonomic-x-drive-tutorial-theory-of.html) talks about the theoretical math.
 
 If you're having trouble with that, [this video](https://www.youtube.com/watch?v=gnSW2QpkGXQ) goes over two potential answers. (A mecanum wheel can be treated the same as an omniwheel at a 45 degree angle).
 
-# Final Thoughts
+# Thoughts
 
-As you finish the training program, we've compiled a small overview of the classes we use and how they fit together, and you can find that [here](classesOverview.md). It is intended to make the transition to working on the robot easier.
+As you near the end the training program, we've compiled a small overview of the classes we use and how they fit together, and you can find that [here](classesOverview.md). It is intended to make the transition to working on the robot easier.
 
 It is also highly recommended that you look at the [baseline code example](baseCodeExample.md), it has an example of empty code that has nothing but the baseline requirements for the code to run in general, like #includes, loops, required motor functions, and etc.
