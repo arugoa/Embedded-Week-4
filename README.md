@@ -172,7 +172,7 @@ For this assignment, you're going to be working with multiple motors and impleme
 All motors will be on CANBUS 1, of type M3508, and they will be ID'd as such. Front Left is ID 1, Front Right is ID 2, Back Left is ID 3, and Back Right is ID 4.
 
 Consider the wheels in an orientation like so, and assume that a wheel will move clockwise when given a positive speed.
-[](assets/omni.png)
+![](assets/omni.png)
 (This is not what our robots look like, this was a frame when we were switching chassis types two years ago, it's the only good photo I have of all four wheels and the frame.)
 
 See if you can figure out the formula to do so on your own. 
