@@ -6,6 +6,7 @@
 // super simplified version of how DJIMotor works and how we access the remote data
 #include <string>
 #include <cstdint>
+#include <iostream>
 constexpr int CAN_HANDLER_NUMBER = 2;
 
 enum motorType {
@@ -33,18 +34,68 @@ enum motorDataType {
 
 class Remote {
 public:
-    enum class SwitchState
-    {
-        UNKNOWN,
-        DOWN,
-        MID,
-        UP
-    };
+
+    
+
+enum class SwitchState
+{
+    UNKNOWN,
+    DOWN,
+    MID,
+    UP
 };
 
-// never use global variables, we are using them here due to the nature of this assignment
-Remote::SwitchState lS;         // left switch
-int lX;                         // x value of left joystick
+    int leftX(){
+        return lefX;
+    }
+
+    int leftY(){
+        return lefY;
+    }
+
+    int rightX(){
+        return righX;
+    }
+
+    int rightY(){
+        return righY;
+    }
+
+    Remote::SwitchState leftSwitch(){
+        return lefS;
+    }
+
+    Remote::SwitchState rightSwitch(){
+        return righS;
+    }
+
+    void read(bool debug = false){
+        static int count;
+        count %= 660;
+
+        if((count % 15) / 5  == 0)
+            lefS = Remote::SwitchState::UP;
+
+        else if((count % 15) / 5 == 1)
+            lefS = Remote::SwitchState::MID;
+
+        else if((count % 15) / 5 == 2)
+            lefS = Remote::SwitchState::DOWN;
+
+        lefX = count;
+
+        if(debug){
+            printf("lX:[%d] lS:[%d]",lefX, (int)lefS);
+        }
+
+        count++;
+    }
+
+private:
+    int lefX, lefY, righX, righY;
+    Remote::SwitchState lefS, righS;
+
+};
 
 class CANHandler{
     public:
@@ -137,36 +188,27 @@ public:
 
 DJIMotor* DJIMotor::s_allMotors[2][3][4];
 bool DJIMotor::s_motorsExist[2][3][4];
+Remote remote;
 
 void remoteRead(bool debug = false){
-    static int count;
-    count %= 660;
-
-    if((count % 15) / 5  == 0)
-        lS = Remote::SwitchState::UP;
-
-    else if((count % 15) / 5 == 1)
-        lS = Remote::SwitchState::MID;
-
-    else if((count % 15) / 5 == 2)
-        lS = Remote::SwitchState::DOWN;
-
-    lX = count;
-
-    if(debug){
-        printf("lX:[%d] lS:[%d]",lX, (int)lS);
-    }
-
-    count++;
+    remote.read(debug);
 }
 
 ///////////////
 //main.cpp
 ///////////////
 
+
 // ONLY ADD CODE BELOW
 // Use prints and getData() for debugging purposes
 
 int main(){
     
+    //SETUP CODE HERE
+
+    while(true){ //main loop
+
+        //MAIN CODE HERE
+
+    }
 }
