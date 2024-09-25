@@ -177,6 +177,8 @@ Consider the wheels in an orientation like so, and assume that a wheel will move
 
 See if you can figure out the formula to do so on your own.
 
+In terms of scaling, the max RPM of a motor is ~9000, and remember that the remote will give you values of $\pm$ 660, so you can use those two factors to try and scale your code accordingly.
+
 If you're having trouble, [this article](http://blog.elliotjb.com/2013/10/holonomic-x-drive-tutorial-theory-of.html) talks about the theoretical math.
 
 If you're having trouble with that, [this video](https://www.youtube.com/watch?v=gnSW2QpkGXQ) goes over two potential answers. (A mecanum wheel can be treated the same as an omniwheel at a 45 degree angle).
