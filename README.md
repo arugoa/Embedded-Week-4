@@ -152,7 +152,7 @@ For this assignment, we're writing main robot code. The task is to make the main
 
 We have three robot modes we want you to code, depending on the left switch. If it is up, we are in power mode, if it is mid we are in speed mode and if is down we are in position mode.
 
-For all three modes, set the respective element to 10x the left stick x `lS` value.
+For all three modes, set the respective element to a scalar times the left stick x `leftX` value.
 For power mode, set the motor's power to 20 times the left stick X value.
 For speed mode, set the motor's speed to 5 times the left stick X value.
 for position mode, set the motor's position to 10 times the left stick X value.
