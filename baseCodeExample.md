@@ -37,6 +37,7 @@ int main(){
                 refLoop = 0;
                 refereeThread(&referee);
             }
+            refLoop++;
 
             remoteRead(); //reading data from remote
 
