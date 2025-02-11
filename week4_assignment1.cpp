@@ -205,10 +205,29 @@ void remoteRead(bool debug = false){
 int main(){
     
     //SETUP CODE HERE
+    DJIMotor* robot = new DJIMotor(1, CANHandler::CANBus::CANBUS_1, motorType::M3508, "motor1");
 
     while(true){ //main loop
 
         //MAIN CODE HERE
+        remoteRead();
 
+        if (remote.leftSwitch() == Remote::SwitchState::UP) {
+            // mode = power
+            robot->setPower(remote.leftX() * 20);
+            robot->setOutput();
+        }
+        else if (remote.leftSwitch() == Remote::SwitchState::MID) {
+            // mode = speed
+            robot->setSpeed(remote.leftX() * 5);
+            robot->setOutput();
+        }
+        else if (remote.leftSwitch() == Remote::SwitchState::DOWN) {
+            //mode = position 
+            robot->setPosition(remote.leftX() * 10);
+            robot->setOutput();
+        }
+
+        robot->s_sendValues();
     }
 }
