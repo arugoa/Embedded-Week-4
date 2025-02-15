@@ -10,6 +10,22 @@ DigitalOut led3(L25);
 I2C i2c(I2C_SDA, I2C_SCL);
 
 //DEFINE MOTORS, ETC
+const int RPM_MAX = 9000;
+const int REMOTE_MAX = 660;
+const int RPM_REMOTE_RATIO = RPM_MAX / REMOTE_MAX;
+
+DJIMotor* DJIMotor::s_allMotors[2][3][4];
+bool DJIMotor::s_motorsExist[2][3][4];
+Remote remote;
+
+DJIMotor* frontleft = new DJIMotor(1, CANHandler::CANBus::CANBUS_1, motorType::M3508, "FL");
+
+DJIMotor* frontright = new DJIMotor(2, CANHandler::CANBus::CANBUS_1, motorType::M3508, "FR");
+
+DJIMotor* backleft = new DJIMotor(3, CANHandler::CANBus::CANBUS_1, motorType::M3508, "BL");
+
+DJIMotor* backright = new DJIMotor(4, CANHandler::CANBus::CANBUS_1, motorType::M3508, "BR");
+
 
 int main(){
 
@@ -42,8 +58,23 @@ int main(){
             refLoop ++;
 
             remoteRead(); //reading data from remote
+        
+            //MAIN CODE
+            int flspeed, frspeed, blspeed, brspeed = 0, 0, 0, 0;
 
-            //MAIN CODE 
+            flspeed += ((remote.leftY() + remote.leftX() + remote.rightX()) * RPM_REMOTE_RATIO) % RPM_MAX;
+
+            frspeed += ((-remote.leftY() + remote.leftX() + remote.rightX()) * RPM_REMOTE_RATIO) % RPM_MAX;
+
+            blspeed += ((remote.leftY() - remote.leftX() + remote.rightX()) * RPM_REMOTE_RATIO) % RPM_MAX;
+
+            brspeed += (( - remote.leftY() - remote.leftX() + remote.rightX()) * RPM_REMOTE_RATIO) % RPM_MAX;
+
+            frontleft->setSpeed(flspeed);
+            frontright->setSpeed(frspeed);
+            backleft->setSpeed(blspeed);
+            backright->setSpeed(brspeed);
+
             //MOST CODE DOESNT NEED TO RUN FASTER THAN EVERY 25ms
 
             timeEnd_u = us_ticker_read();
